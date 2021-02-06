@@ -21,11 +21,14 @@ namespace AvtoNetScraper.Migrations
                 name: "NotificationsLog",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     CarId = table.Column<int>(nullable: false),
                     SentTimestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_NotificationsLog", x => x.Id);
                 });
         }
 

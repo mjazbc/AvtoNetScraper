@@ -16,15 +16,6 @@ namespace AvtoNetScraper.Database
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=Database\\cars.db");
         
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder
-                .Entity<NotificationLog>(
-                    nl =>
-                    {
-                        nl.HasNoKey();
-                    });
-        }
     }
 
     public class Url
@@ -71,6 +62,7 @@ namespace AvtoNetScraper.Database
     }
     public class NotificationLog
     {
+        public int Id {get;set;}
         public int CarId {get; set;}
         public DateTime SentTimestamp {get; set;}
     }

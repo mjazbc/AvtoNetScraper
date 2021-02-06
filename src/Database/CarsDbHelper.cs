@@ -52,6 +52,14 @@ namespace AvtoNetScraper.Database
             return cars.Select(c => c.Id).ToList();
         }
 
+        public List<Url> GetUrls(IList<Car> cars)
+        {
+            using (var db = new CarsContext())
+            {
+                return db.Urls.Join(db.Cars, i => i.Id, o => o.UrlId, (u, c) => u).ToList();
+            }
+        }
+
         public IList<Car> GetCarsWithoutNotification()
         {
             using (var db = new CarsContext())

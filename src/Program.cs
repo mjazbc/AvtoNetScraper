@@ -26,9 +26,9 @@ namespace AvtoNetScraper
         {
             var settings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             
-            if (args.Length > 2)
+            if (args.Length > 4)
             {
-                Colorful.Console.WriteLine("Invalid arguments supplied, only -urls and -cars allowed.", Color.Red);
+                Colorful.Console.WriteLine("Invalid arguments supplied. Allowed: -urls, -cars, -images, -notify.", Color.Red);
                 return;
             }
 
@@ -68,9 +68,11 @@ namespace AvtoNetScraper
         private static void SendNotifications(AppSettings settings)
         {
             var carsWithoutNotification = _dbHelper.GetCarsWithoutNotification();
+            var urls = _dbHelper.GetUrls(carsWithoutNotification);
+            
             var notifer = new TelegramNotifier(settings);
             
-            notifer.SendNotificationsForCarsAsync(carsWithoutNotification).Wait();
+            notifer.SendNotificationsForCarsAsync(carsWithoutNotification, urls).Wait();
 
             var logRecords = carsWithoutNotification.Select(c => 
                 new NotificationLog{

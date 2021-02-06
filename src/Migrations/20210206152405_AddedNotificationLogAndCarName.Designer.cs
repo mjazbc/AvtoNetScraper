@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AvtoNetScraper.Migrations
 {
     [DbContext(typeof(CarsContext))]
-    [Migration("20210206141222_AddedNotificationLogAndCarName")]
+    [Migration("20210206152405_AddedNotificationLogAndCarName")]
     partial class AddedNotificationLogAndCarName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,11 +112,17 @@ namespace AvtoNetScraper.Migrations
 
             modelBuilder.Entity("AvtoNetScraper.Database.NotificationLog", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CarId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("SentTimestamp")
                         .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.ToTable("NotificationsLog");
                 });

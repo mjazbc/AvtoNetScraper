@@ -110,11 +110,17 @@ namespace AvtoNetScraper.Migrations
 
             modelBuilder.Entity("AvtoNetScraper.Database.NotificationLog", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CarId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("SentTimestamp")
                         .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.ToTable("NotificationsLog");
                 });
