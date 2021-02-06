@@ -37,12 +37,34 @@ namespace AvtoNetScraper.Database
                 return nonScrapedUrls;
             }
         }
-
-        public void InsertCars(IList<Car> cars)
+        /// <summary>
+        /// Inserts cars to database and returns their ids.
+        /// </summary>
+        /// <returns>A list of car id's</returns>
+        public IList<int> InsertCars(IList<Car> cars)
         {
             using (var db = new CarsContext())
             {
                 db.Cars.AddRange(cars);
+                db.SaveChanges();
+            }
+
+            return cars.Select(c => c.Id).ToList();
+        }
+
+        public IList<Car> GetCarsWithoutNotification()
+        {
+            using (var db = new CarsContext())
+            {
+                return db.Cars.Where(p => db.NotificationsLog.All(p2 => p2.CarId != p.Id)).ToList();
+            }
+        }
+
+        public void InsertNotificationsLog(IList<NotificationLog> notifications)
+        {
+            using (var db = new CarsContext())
+            {
+                db.NotificationsLog.AddRange(notifications);     
                 db.SaveChanges();
             }
         }

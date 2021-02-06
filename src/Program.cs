@@ -2,6 +2,7 @@
 using AvtoNetScraper.Scrapers;
 using AvtoNetScraper.Settings;
 using AvtoNetScraper.Utilities;
+using AvtoNetScraper.Notifications;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,27 @@ namespace AvtoNetScraper
                 Colorful.Console.WriteLine("-images option chosen, will download car ad picture for all urls in database.", Color.Yellow);
                 DownloadCarImages(settings);
             }
+            if (args.Contains("-notify"))
+            {
+                Colorful.Console.WriteLine("-notify option chosen, will send notifications for every car found.", Color.Yellow);
+                SendNotifications(settings);
+            }
+        }
+
+        private static void SendNotifications(AppSettings settings)
+        {
+            var carsWithoutNotification = _dbHelper.GetCarsWithoutNotification();
+            var notifer = new TelegramNotifier(settings);
+            
+            notifer.SendNotificationsForCarsAsync(carsWithoutNotification).Wait();
+
+            var logRecords = carsWithoutNotification.Select(c => 
+                new NotificationLog{
+                    CarId = c.Id,
+                    SentTimestamp = DateTime.UtcNow
+                }).ToList();
+
+            _dbHelper.InsertNotificationsLog(logRecords);
         }
 
         private static void ScrapeCarUrls(AppSettings settings)
@@ -99,7 +121,7 @@ namespace AvtoNetScraper
                     Console.Title = $"Scraped {++progress} / {nonScrapedUrls.Count} car urls ({(double)progress / nonScrapedUrls.Count:P2}). Remaining time:{TimeSpan.FromMilliseconds((nonScrapedUrls.Count - progress)*150).ToLongString()}.";
                 }
 
-                _dbHelper.InsertCars(cars);
+                var newCarIds = _dbHelper.InsertCars(cars);
                 Colorful.Console.WriteLine($"Inserted {cars.Count} cars from batch into database...", Color.SkyBlue);
             }
         }

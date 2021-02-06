@@ -11,8 +11,20 @@ namespace AvtoNetScraper.Database
 
         public DbSet<Car> Cars { get; set; }
 
+        public DbSet<NotificationLog> NotificationsLog {get; set;}
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=Database\\cars.db");
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<NotificationLog>(
+                    nl =>
+                    {
+                        nl.HasNoKey();
+                    });
+        }
     }
 
     public class Url
@@ -53,6 +65,15 @@ namespace AvtoNetScraper.Database
         public string StockStatus { get; set; }
         public string PictureUrl { get; set; }
         public string LocalPicturePath { get; set; }
+
+        public string Name {get; set;}
+        public string Details {get; set;}
     }
+    public class NotificationLog
+    {
+        public int CarId {get; set;}
+        public DateTime SentTimestamp {get; set;}
+    }
+    
 
 }

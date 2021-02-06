@@ -9,5 +9,8 @@ namespace AvtoNetScraper.Settings
         public string[] SearchFilterUrls { get; set; }
         public long RequestIntervalMs { get; set; }
         public string ImagesDirectory { get; set; }
+        public string TelegramToken {get; set;}
+        public string TelegramChatId {get; set;}
+        
     }
 }

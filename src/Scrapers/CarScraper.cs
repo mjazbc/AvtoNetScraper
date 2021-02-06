@@ -34,6 +34,16 @@ namespace AvtoNetScraper.Scrapers
             {
                 UrlId = _url.Id
             };
+
+            var nameNode = document.DocumentNode.SelectSingleNode("//comment()[contains(., '-- TITLE --')]/following-sibling::div/h3");
+            var name =  CleanUpHtmlGarbage(nameNode.GetDirectInnerText());
+
+            car.Name = name;
+
+            var detailsNode = nameNode.ChildNodes.FirstOrDefault(x => x.Name == "small");
+            var details = detailsNode?.InnerText;
+
+            car.Details = details;
             
             var priceNode = document.DocumentNode.SelectSingleNode("//comment()[contains(., '-- PRICE --')]/following-sibling::div");
             var priceText =  priceNode.InnerText.Trim();
@@ -101,12 +111,15 @@ namespace AvtoNetScraper.Scrapers
             return 0;
         }
 
+        private static string CleanUpHtmlGarbage(string text)
+        {
+            return text.Trim().Replace("&nbsp;", " ").Replace("\t", "").Replace(Environment.NewLine, "");
+        }
         private void SetCarAttribute(Car car, string name, string value)
         {
             name = name.Trim();
-            
-            //cleanup html garbage
-            value = value.Trim().Replace("&nbsp;", " ").Replace("\t", "").Replace(Environment.NewLine, "");
+
+            value = CleanUpHtmlGarbage(value);
             switch (name)
             {
                 case "Starost:":
