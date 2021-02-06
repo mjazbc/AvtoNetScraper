@@ -14,7 +14,7 @@ namespace AvtoNetScraper.Database
         public DbSet<NotificationLog> NotificationsLog {get; set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=Database\\cars.db");
+            => options.UseSqlite($"Data Source={AppDomain.CurrentDomain.BaseDirectory}/Database/cars.db");
         
     }
 

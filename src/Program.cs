@@ -17,9 +17,8 @@ namespace AvtoNetScraper
     internal class Program
     {
         private static IConfiguration Configuration => new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("Settings\\appsettings.json", optional: false)
-    .Build();
+        .AddJsonFile("./Settings/appsettings.json", optional: false)
+        .Build();
 
         private static CarsDbHelper _dbHelper = new CarsDbHelper();
         private static void Main(string[] args)

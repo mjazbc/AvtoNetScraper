@@ -39,6 +39,7 @@ Optional arguments:
 1. `dotnet run -- -urls` - will only parse car urls and insert them into database, will not make a request to each url and parse each car's info
 2. `dotnet run -- -cars` - will read the `Url` table from local database and make a request to each car url and parse each car's info into database
 3. `dotnet run -- -images` - will read the `Car` table from local database and make a request to each car url image and download it to a local path specified in appsettings
+4. `dotnet run -- -notify` - will send messages to configured Telegram chat for every new car ad from configured urls.
 
 ## Development
 ### Updating database model
